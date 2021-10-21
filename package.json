@@ -1,0 +1,23 @@
+{
+  "name": "wall-of-globes",
+  "version": "1.0.0",
+  "description": "A video wall system based on VLC.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/millerpeterson/wall-of-globes.git"
+  },
+  "keywords": [
+    "VLC",
+    "video-wall"
+  ],
+  "author": "Miller Peterson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/millerpeterson/wall-of-globes/issues"
+  },
+  "homepage": "https://github.com/millerpeterson/wall-of-globes#readme"
+}
