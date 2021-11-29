@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -24,16 +26,42 @@ func VlcPlay(file string, args []string) {
 	}
 }
 
-func VideoFilterVlcArgs(filterName string, filterArgs map[string]string) string {
-	filterArgPairs := make([]string, len(filterArgs))
-	argIndex := 0
+func VideoFilterArg(filterName string, filterArgs map[string]string) string {
+	sortedArgs := make([]string, 0)
 	for argName := range filterArgs {
-		filterArgPairs[argIndex] = fmt.Sprintf("%v=%v", argName, filterArgs[argName])
-		argIndex++
+		sortedArgs = append(sortedArgs, argName)
+	}
+	sort.Strings(sortedArgs)
+	filterArgPairs := make([]string, len(filterArgs))
+	for i, argName := range sortedArgs {
+		filterArgPairs[i] = fmt.Sprintf("%v=%v", argName, filterArgs[argName])
 	}
 	return fmt.Sprintf("--video-filter=%v{%v}", filterName, strings.Join(filterArgPairs, ","))
 }
 
+func CropFilterArg(cropArgs map[string]int) string {
+	cropArgNames := map[string]string{
+		"top":    "croptop",
+		"bottom": "cropbottom",
+		"left":   "cropleft",
+		"right":  "cropright",
+	}
+	cropArgsStrings := make(map[string]string, len(cropArgs))
+	for argName := range cropArgs {
+		cropArgsStrings[cropArgNames[argName]] = strconv.Itoa(cropArgs[argName])
+	}
+	return VideoFilterArg("croppadd", cropArgsStrings)
+}
+
 func main() {
-	VlcPlay("/Users/miller/Documents/Code/wall-of-globes/terminator.mp4", []string{})
+	cropArg := CropFilterArg(map[string]int{
+		"top":    100,
+		"bottom": 100,
+		"left":   500,
+		"right":  200,
+	})
+	vlcArgs := []string{cropArg}
+
+	fmt.Print(vlcArgs)
+	VlcPlay("/Users/miller/Documents/Code/wall-of-globes/terminator.mp4", vlcArgs)
 }
