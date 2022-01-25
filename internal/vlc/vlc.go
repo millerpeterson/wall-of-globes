@@ -2,6 +2,7 @@ package vlc
 
 import (
 	"fmt"
+	"github.com/millerpeterson/wall-of-globes/internal/player"
 	"os"
 	"os/exec"
 	"runtime"
@@ -55,50 +56,20 @@ func VideoFilterArg(filterName string, filterArgs map[string]string) string {
 	return fmt.Sprintf("--video-filter=%v{%v}", filterName, strings.Join(filterArgPairs, ","))
 }
 
-func CropFilterArg(cropArgs PlayerArgs) string {
+func CropFilterArg(cropArgs player.Args) string {
 	cropArgStrings := map[string]string{
-		"croptop":    strconv.Itoa(cropArgs.top),
-		"cropbottom": strconv.Itoa(cropArgs.bottom),
-		"cropleft":   strconv.Itoa(cropArgs.left),
-		"cropright":  strconv.Itoa(cropArgs.right),
+		"croptop":    strconv.Itoa(cropArgs.Top),
+		"cropbottom": strconv.Itoa(cropArgs.Bottom),
+		"cropleft":   strconv.Itoa(cropArgs.Left),
+		"cropright":  strconv.Itoa(cropArgs.Right),
 	}
 	return VideoFilterArg("croppadd", cropArgStrings)
 }
 
-type PlayerArgs struct {
-	top    int
-	bottom int
-	left   int
-	right  int
-}
-
-type Player interface {
-	play(file string, args PlayerArgs)
-}
-
-type AppPlayer struct {
+type Player struct {
 	proc *exec.Cmd
 }
 
-func (p AppPlayer) play(file string, args PlayerArgs) {
+func (p Player) play(file string, args player.Args) {
 	p.proc = Play(file, []string{CropFilterArg(args)})
-}
-
-type PlayCmd struct {
-	file string
-	args PlayerArgs
-}
-
-type PlayCmdLogger struct {
-	log []PlayCmd
-}
-
-func (p PlayCmdLogger) play(file string, args PlayerArgs) {
-	p.log = append(p.log, PlayCmd{file, args})
-}
-
-func Logger() *Player {
-	var p Player
-	p = PlayCmdLogger{}
-	return &p
 }

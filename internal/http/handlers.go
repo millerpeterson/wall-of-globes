@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"fmt"
-	"github.com/millerpeterson/wall-of-globes/internal/vlc"
+	"github.com/millerpeterson/wall-of-globes/internal/player"
 	"net/http"
 )
 
@@ -10,7 +10,7 @@ func Status(w http.ResponseWriter) {
 	fmt.Fprint(w, "OK")
 }
 
-func Play(w http.ResponseWriter, r *http.Request, player *vlc.Player) {
+func Play(w http.ResponseWriter, r *http.Request, player *player.Player) {
 	fmt.Fprint(w, "OK")
 }
 
@@ -19,7 +19,7 @@ func NotFound(w http.ResponseWriter) {
 	fmt.Fprint(w, "Not Found")
 }
 
-func Server(player *vlc.Player) func(http.ResponseWriter, *http.Request) {
+func Server(player *player.Player) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodGet && r.URL.Path == "/status" {
 			Status(w)

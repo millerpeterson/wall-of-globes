@@ -1,6 +1,9 @@
 package vlc
 
-import "testing"
+import (
+	"github.com/millerpeterson/wall-of-globes/internal/player"
+	"testing"
+)
 
 func TestVideoFilterVlcArg(t *testing.T) {
 	expected := "--video-filter=somefilter{four=def,one=1,three=abc,two=110}"
@@ -20,11 +23,11 @@ func TestVideoFilterVlcArg(t *testing.T) {
 func TestCropFilterArg(t *testing.T) {
 	expected := "--video-filter=croppadd{cropbottom=140,cropleft=1800,cropright=36000,croptop=10}"
 
-	cropArgs := PlayerArgs{
-		top:    10,
-		bottom: 140,
-		left:   1800,
-		right:  36000,
+	cropArgs := player.Args{
+		Top:    10,
+		Bottom: 140,
+		Left:   1800,
+		Right:  36000,
 	}
 	actual := CropFilterArg(cropArgs)
 

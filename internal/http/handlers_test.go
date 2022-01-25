@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/millerpeterson/wall-of-globes/internal/vlc"
+	"github.com/millerpeterson/wall-of-globes/internal/player"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -12,7 +12,7 @@ func TestStatus(t *testing.T) {
 		request, _ := http.NewRequest(http.MethodGet, "/status", nil)
 		response := httptest.NewRecorder()
 
-		Server(vlc.Logger())(response, request)
+		Server(player.Logger())(response, request)
 
 		if response.Code != 200 {
 			t.Errorf("Unexpected response code %v", response.Code)
@@ -32,7 +32,7 @@ func TestPlay(t *testing.T) {
 		request, _ := http.NewRequest(http.MethodPost, "/play", nil)
 		response := httptest.NewRecorder()
 
-		logger := vlc.Logger()
+		logger := player.Logger()
 		Server(logger)(response, request)
 
 		if response.Code != 200 {
@@ -51,7 +51,7 @@ func TestInvalidRoute(t *testing.T) {
 		request, _ := http.NewRequest(http.MethodPost, "/invalid", nil)
 		response := httptest.NewRecorder()
 
-		Server(vlc.Logger())(response, request)
+		Server(player.Logger())(response, request)
 
 		if response.Code != 404 {
 			t.Errorf("Unexpected response code %v", response.Code)
