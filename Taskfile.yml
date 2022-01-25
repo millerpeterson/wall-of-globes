@@ -18,4 +18,4 @@ tasks:
 
   play-stream:
     cmds:
-      - echo "vlc -vvv udp://@{{.MULTICAST_ADDR}}"
+      - echo "vlc -vvv udp://@{{.MULTICAST_ADDR}} --video-filter=croppadd{croptop=100} --codec avcodec,none"
