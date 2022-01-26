@@ -8,24 +8,18 @@ type Args struct {
 }
 
 type Player interface {
-	play(file string, args Args)
+	Play(file string, args Args)
 }
 
 type PlayCmd struct {
-	file string
-	args Args
+	File string
+	Args Args
 }
 
 type PlayCmdLogger struct {
-	log []PlayCmd
+	Log []PlayCmd
 }
 
-func (p PlayCmdLogger) play(file string, args Args) {
-	p.log = append(p.log, PlayCmd{file, args})
-}
-
-func Logger() *Player {
-	var p Player
-	p = PlayCmdLogger{}
-	return &p
+func (p *PlayCmdLogger) Play(file string, args Args) {
+	p.Log = append(p.Log, PlayCmd{file, args})
 }

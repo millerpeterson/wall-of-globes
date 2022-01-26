@@ -70,6 +70,6 @@ type Player struct {
 	proc *exec.Cmd
 }
 
-func (p Player) play(file string, args player.Args) {
+func (p *Player) play(file string, args player.Args) {
 	p.proc = Play(file, []string{CropFilterArg(args)})
 }
