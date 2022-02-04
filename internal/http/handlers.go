@@ -8,7 +8,10 @@ import (
 )
 
 func Status(w http.ResponseWriter) {
-	fmt.Fprint(w, "OK")
+	_, err := fmt.Fprint(w, "OK")
+	if err != nil {
+		panic(err)
+	}
 }
 
 func Play(w http.ResponseWriter, r *http.Request, plyr player.Player) {
@@ -25,25 +28,34 @@ func Play(w http.ResponseWriter, r *http.Request, plyr player.Player) {
 	cropArgs.Right, _ = strconv.Atoi(r.FormValue("right"))
 
 	plyr.Play(filePath, cropArgs)
-	fmt.Fprint(w, "OK")
+	_, err := fmt.Fprint(w, "OK")
+	if err != nil {
+		panic(err)
+	}
 }
 
 func NotFound(w http.ResponseWriter) {
 	w.WriteHeader(404)
-	fmt.Fprint(w, "Not Found")
+	_, err := fmt.Fprint(w, "Not Found")
+	if err != nil {
+		panic(err)
+	}
 }
 
 func BadRequest(w http.ResponseWriter, details string) {
 	w.WriteHeader(400)
-	fmt.Fprintf(w, "Bad request: %v", details)
+	_, err := fmt.Fprintf(w, "Bad request: %v", details)
+	if err != nil {
+		panic(err)
+	}
 }
 
-func Server(player player.Player) func(http.ResponseWriter, *http.Request) {
+func Handler(plyr player.Player) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodGet && r.URL.Path == "/status" {
 			Status(w)
 		} else if r.Method == http.MethodPost && r.URL.Path == "/play" {
-			Play(w, r, player)
+			Play(w, r, plyr)
 		} else {
 			NotFound(w)
 		}

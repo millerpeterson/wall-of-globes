@@ -15,7 +15,7 @@ func TestStatus(t *testing.T) {
 		response := httptest.NewRecorder()
 
 		var logger player.Player = &player.PlayCmdLogger{}
-		Server(logger)(response, request)
+		Handler(logger)(response, request)
 
 		if response.Code != 200 {
 			t.Errorf("Unexpected response code %v", response.Code)
@@ -44,7 +44,7 @@ func TestPlay(t *testing.T) {
 
 		response := httptest.NewRecorder()
 		var logger player.Player = &player.PlayCmdLogger{}
-		Server(logger)(response, request)
+		Handler(logger)(response, request)
 
 		if response.Code != 200 {
 			t.Errorf("Unexpected response code %v", response.Code)
@@ -68,7 +68,7 @@ func TestInvalidRoute(t *testing.T) {
 		response := httptest.NewRecorder()
 
 		var logger player.Player = &player.PlayCmdLogger{}
-		Server(logger)(response, request)
+		Handler(logger)(response, request)
 
 		if response.Code != 404 {
 			t.Errorf("Unexpected response code %v", response.Code)
