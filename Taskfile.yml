@@ -4,9 +4,13 @@ vars:
   MULTICAST_ADDR: 225.0.0.1
 
 tasks:
-  build-tile:
+  build-globe:
     cmds:
       - go build -o bin/tile main.go
+
+  run-globe:
+    cmds:
+      - go run cmd/globe/globe.go
 
   sync-to-pi:
     cmds:
