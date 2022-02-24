@@ -68,3 +68,36 @@ func TestMapRectPos(t *testing.T) {
 		}
 	})
 }
+
+func TestCenteringOffset(t *testing.T) {
+	t.Run("Y offset is 0", func(t *testing.T) {
+		inner := Rect{200, 400}
+		outer := Rect{300, 400}
+		expected := Vec{50, 0}
+		offset := CenteringOffset(inner, outer)
+		if offset != expected {
+			t.Errorf("Expected %v, got %v", expected, offset)
+		}
+	})
+
+	t.Run("Both X and Y positive", func(t *testing.T) {
+		inner := Rect{200, 400}
+		outer := Rect{300, 900}
+		expected := Vec{50, 250}
+		offset := CenteringOffset(inner, outer)
+		if offset != expected {
+			t.Errorf("Expected %v, got %v", expected, offset)
+		}
+	})
+
+	t.Run("inner bigger than outer", func(t *testing.T) {
+		inner := Rect{400, 900}
+		outer := Rect{200, 300}
+		expected := Vec{-100, -300}
+		offset := CenteringOffset(inner, outer)
+		if offset != expected {
+			t.Errorf("Expected %v, got %v", expected, offset)
+		}
+	})
+
+}
