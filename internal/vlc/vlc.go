@@ -3,6 +3,7 @@ package vlc
 import (
 	"fmt"
 	"github.com/millerpeterson/wall-of-globes/internal/player"
+	"log"
 	"os"
 	"os/exec"
 	"runtime"
@@ -67,9 +68,20 @@ func CropFilterArg(cropArgs player.Args) string {
 }
 
 type Player struct {
-	proc *exec.Cmd
+	cmd *exec.Cmd
 }
 
 func (p *Player) Play(file string, args player.Args) {
-	p.proc = Play(file, []string{CropFilterArg(args)})
+	p.cmd = Play(file, []string{CropFilterArg(args)})
+}
+
+func (p *Player) Stop() {
+	if p.cmd == nil {
+		return
+	}
+
+	err := p.cmd.Process.Kill()
+	if err != nil {
+		log.Printf("Warning: Failed to stop VLC process: %v", err)
+	}
 }

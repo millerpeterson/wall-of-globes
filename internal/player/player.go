@@ -16,10 +16,16 @@ type PlayCmd struct {
 	Args Args
 }
 
+var StopCmd = PlayCmd{}
+
 type PlayCmdLogger struct {
 	Log []PlayCmd
 }
 
 func (p *PlayCmdLogger) Play(file string, args Args) {
 	p.Log = append(p.Log, PlayCmd{file, args})
+}
+
+func (p *PlayCmdLogger) Stop() {
+	p.Log = append(p.Log, StopCmd)
 }
