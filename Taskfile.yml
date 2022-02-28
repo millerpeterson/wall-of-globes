@@ -22,8 +22,8 @@ tasks:
   globe-dev-stop:
     desc: Request a local globe to play a file with a crop.
     cmds:
-      - curl -d "file=terminator.mp4&top=400" -X POST http://localhost:8081/stop
-      -
+      - curl -X POST http://localhost:8081/stop
+
   sync-to-pi:
     desc: Sync source code (not binaries) to pi. Pass pi IP as arg.
     cmds:
