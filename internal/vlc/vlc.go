@@ -72,7 +72,7 @@ type Player struct {
 }
 
 func (p *Player) Play(file string, args player.Args) {
-	p.proc = Play(file, []string{CropFilterArg(args)})
+	p.proc = Play(file, []string{"--fullscreen", CropFilterArg(args)})
 }
 
 func (p *Player) Stop() {
