@@ -68,19 +68,19 @@ func CropFilterArg(cropArgs player.Args) string {
 }
 
 type Player struct {
-	cmd *exec.Cmd
+	proc *exec.Cmd
 }
 
 func (p *Player) Play(file string, args player.Args) {
-	p.cmd = Play(file, []string{CropFilterArg(args)})
+	p.proc = Play(file, []string{CropFilterArg(args)})
 }
 
 func (p *Player) Stop() {
-	if p.cmd == nil {
+	if p.proc == nil {
 		return
 	}
 
-	err := p.cmd.Process.Kill()
+	err := p.proc.Process.Kill()
 	if err != nil {
 		log.Printf("Warning: Failed to stop VLC process: %v", err)
 	}

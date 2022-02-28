@@ -34,6 +34,14 @@ func Play(w http.ResponseWriter, r *http.Request, plyr player.Player) {
 	}
 }
 
+func Stop(w http.ResponseWriter, plyr player.Player) {
+	plyr.Stop()
+	_, err := fmt.Fprint(w, "OK")
+	if err != nil {
+		panic(err)
+	}
+}
+
 func NotFound(w http.ResponseWriter) {
 	w.WriteHeader(404)
 	_, err := fmt.Fprint(w, "Not Found")
@@ -56,6 +64,8 @@ func Handler(plyr player.Player) func(w http.ResponseWriter, r *http.Request) {
 			Status(w)
 		} else if r.Method == http.MethodPost && r.URL.Path == "/play" {
 			Play(w, r, plyr)
+		} else if r.Method == http.MethodPost && r.URL.Path == "/stop" {
+			Stop(w, plyr)
 		} else {
 			NotFound(w)
 		}

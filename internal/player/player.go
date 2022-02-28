@@ -9,6 +9,7 @@ type Args struct {
 
 type Player interface {
 	Play(file string, args Args)
+	Stop()
 }
 
 type PlayCmd struct {

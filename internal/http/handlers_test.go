@@ -82,3 +82,27 @@ func TestInvalidRoute(t *testing.T) {
 		}
 	})
 }
+
+func TestStop(t *testing.T) {
+	t.Run("Stop", func(t *testing.T) {
+		request, _ := http.NewRequest(http.MethodPost, "/stop", nil)
+		request.Header.Set("Content-Type", "application/x-www-form-urlencoded; param=value")
+
+		response := httptest.NewRecorder()
+		var logger player.Player = &player.PlayCmdLogger{}
+		Handler(logger)(response, request)
+
+		if response.Code != 200 {
+			t.Errorf("Unexpected response code %v", response.Code)
+		}
+
+		var expectedPlayCmd = player.PlayCmd{}
+		loggedCmd := player.PlayCmd{}
+		if len(logger.(*player.PlayCmdLogger).Log) > 0 {
+			loggedCmd = logger.(*player.PlayCmdLogger).Log[0]
+		}
+		if loggedCmd != expectedPlayCmd {
+			t.Errorf("Expected play cmd %v, received %v", expectedPlayCmd, loggedCmd)
+		}
+	})
+}
