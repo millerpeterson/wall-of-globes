@@ -9,15 +9,15 @@ import (
 
 func TestEnclosingRect(t *testing.T) {
 	wall := Tiling{
-		Tile{
+		"one": Tile{
 			Offset: geom.Vec{200, 300},
 			Rect:   geom.Rect{500, 900},
 		},
-		Tile{
+		"two": Tile{
 			Offset: geom.Vec{300, 150},
 			Rect:   geom.Rect{300, 1000},
 		},
-		Tile{
+		"three": Tile{
 			Offset: geom.Vec{0, 800},
 			Rect:   geom.Rect{100, 1000},
 		},
@@ -33,103 +33,103 @@ func TestCrops(t *testing.T) {
 	// 3x3 grid
 	wall := Tiling{
 		// 0,0
-		Tile{
+		"one": Tile{
 			Offset: geom.Vec{0, 0},
 			Rect:   geom.Rect{300, 200},
 		},
 		// 1,0
-		Tile{
+		"two": Tile{
 			Offset: geom.Vec{300, 0},
 			Rect:   geom.Rect{300, 200},
 		},
 		// 2,0
-		Tile{
+		"three": Tile{
 			Offset: geom.Vec{600, 0},
 			Rect:   geom.Rect{300, 200},
 		},
 		// 0,1
-		Tile{
+		"four": Tile{
 			Offset: geom.Vec{0, 200},
 			Rect:   geom.Rect{300, 200},
 		},
 		// 1,1
-		Tile{
+		"five": Tile{
 			Offset: geom.Vec{300, 200},
 			Rect:   geom.Rect{300, 200},
 		},
 		// 2,1
-		Tile{
+		"six": Tile{
 			Offset: geom.Vec{600, 200},
 			Rect:   geom.Rect{300, 200},
 		},
 		// 0,2
-		Tile{
+		"seven": Tile{
 			Offset: geom.Vec{0, 400},
 			Rect:   geom.Rect{300, 200},
 		},
 		// 1,2
-		Tile{
+		"eight": Tile{
 			Offset: geom.Vec{300, 400},
 			Rect:   geom.Rect{300, 200},
 		},
 		// 2,2
-		Tile{
+		"nine": Tile{
 			Offset: geom.Vec{600, 400},
 			Rect:   geom.Rect{300, 200},
 		},
 	}
 	srcVideo := geom.Rect{900, 600}
 	crops := Crops(srcVideo, wall)
-	expected := []player.Args{
-		{
+	expected := map[string]player.Args{
+		"one": {
 			Top:    0,
 			Bottom: 400,
 			Left:   0,
 			Right:  600,
 		},
-		{
+		"two": {
 			Top:    0,
 			Bottom: 400,
 			Left:   300,
 			Right:  300,
 		},
-		{
+		"three": {
 			Top:    0,
 			Bottom: 400,
 			Left:   600,
 			Right:  0,
 		},
-		{
+		"four": {
 			Top:    200,
 			Bottom: 200,
 			Left:   0,
 			Right:  600,
 		},
-		{
+		"five": {
 			Top:    200,
 			Bottom: 200,
 			Left:   300,
 			Right:  300,
 		},
-		{
+		"six": {
 			Top:    200,
 			Bottom: 200,
 			Left:   600,
 			Right:  0,
 		},
-		{
+		"seven": {
 			Top:    400,
 			Bottom: 0,
 			Left:   0,
 			Right:  600,
 		},
-		{
+		"eight": {
 			Top:    400,
 			Bottom: 0,
 			Left:   300,
 			Right:  300,
 		},
-		{
+		"nine": {
 			Top:    400,
 			Bottom: 0,
 			Left:   600,

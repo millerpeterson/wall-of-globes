@@ -11,8 +11,8 @@ type Tile struct {
 	Rect   geom.Rect
 }
 
-// Tiling - A collection of tiles.
-type Tiling []Tile
+// Tiling - A collection of named tiles.
+type Tiling map[string]Tile
 
 // EnclosingRect - the minimal rectangle that covers the tiles in a wall.
 func EnclosingRect(wlt Tiling) geom.Rect {
@@ -33,16 +33,17 @@ func EnclosingRect(wlt Tiling) geom.Rect {
 
 // Crops - get an array of crops for `srcVideo`, each one corresponding
 // to a tile in a wall.
-func Crops(srcVideo geom.Rect, wlt Tiling) (crops []player.Args) {
+func Crops(srcVideo geom.Rect, wlt Tiling) map[string]player.Args {
 	wlBound := EnclosingRect(wlt)
 	fit := geom.MaxInnerFit(wlBound, srcVideo)
 	wlOffset := geom.CenteringOffset(fit, srcVideo)
-	for _, tl := range wlt {
+	crops := map[string]player.Args{}
+	for tlName, tl := range wlt {
 		l := wlOffset.X + tl.Offset.X
 		r := srcVideo.Width - (l + tl.Rect.Width)
 		t := wlOffset.Y + tl.Offset.Y
 		b := srcVideo.Height - (t + tl.Rect.Height)
-		crops = append(crops, player.Args{Top: t, Bottom: b, Left: l, Right: r})
+		crops[tlName] = player.Args{Top: t, Bottom: b, Left: l, Right: r}
 	}
 	return crops
 }
