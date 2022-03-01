@@ -1,13 +1,13 @@
 package geom
 
 type Vec struct {
-	X int
-	Y int
+	X int `json:"x"`
+	Y int `json:"y"`
 }
 
 type Rect struct {
-	Width  int
-	Height int
+	Width  int `json:"width"`
+	Height int `json:"height"`
 }
 
 func (r Rect) AspectRatio() float32 {

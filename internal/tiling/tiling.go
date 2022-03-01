@@ -7,8 +7,8 @@ import (
 
 // Tile - A rectangle offset in space.
 type Tile struct {
-	Offset geom.Vec
-	Rect   geom.Rect
+	Offset geom.Vec  `json:"offset"`
+	Rect   geom.Rect `json:"rect"`
 }
 
 // Tiling - A collection of named tiles.

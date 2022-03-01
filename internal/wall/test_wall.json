@@ -1,0 +1,39 @@
+{
+  "server_map": {
+    "one": "192.168.0.1",
+    "two": "192.168.0.2",
+    "three": "192.168.0.3"
+  },
+  "tiles": {
+    "one": {
+      "offset": {
+        "x": 10,
+        "y": 10
+      },
+      "rect": {
+        "width": 300,
+        "height": 200
+      }
+    },
+    "two": {
+      "offset": {
+        "x": 50,
+        "y": 70
+      },
+      "rect": {
+        "width": 600,
+        "height": 400
+      }
+    },
+    "three": {
+      "offset": {
+        "x": 250,
+        "y": 270
+      },
+      "rect": {
+        "width": 900,
+        "height": 600
+      }
+    }
+  }
+}
