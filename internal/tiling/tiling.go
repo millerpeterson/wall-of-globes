@@ -37,12 +37,14 @@ func Crops(srcVideo geom.Rect, wlt Tiling) map[string]player.Args {
 	wlBound := EnclosingRect(wlt)
 	fit := geom.MaxInnerFit(wlBound, srcVideo)
 	wlOffset := geom.CenteringOffset(fit, srcVideo)
+	wScale := float32(fit.Width) / float32(wlBound.Width)
+	hScale := float32(fit.Height) / float32(wlBound.Height)
 	crops := map[string]player.Args{}
 	for tlName, tl := range wlt {
-		l := wlOffset.X + tl.Offset.X
-		r := srcVideo.Width - (l + tl.Rect.Width)
-		t := wlOffset.Y + tl.Offset.Y
-		b := srcVideo.Height - (t + tl.Rect.Height)
+		l := wlOffset.X + int(float32(tl.Offset.X)*wScale)
+		r := srcVideo.Width - (l + int(float32(tl.Rect.Width)*wScale))
+		t := wlOffset.Y + int(float32(tl.Offset.Y)*hScale)
+		b := srcVideo.Height - (t + int(float32(tl.Rect.Height)*hScale))
 		crops[tlName] = player.Args{Top: t, Bottom: b, Left: l, Right: r}
 	}
 	return crops

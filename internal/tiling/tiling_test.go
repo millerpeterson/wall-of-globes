@@ -35,47 +35,47 @@ func TestCrops(t *testing.T) {
 		// 0,0
 		"one": Tile{
 			Offset: geom.Vec{0, 0},
-			Rect:   geom.Rect{300, 200},
+			Rect:   geom.Rect{30, 20},
 		},
 		// 1,0
 		"two": Tile{
-			Offset: geom.Vec{300, 0},
-			Rect:   geom.Rect{300, 200},
+			Offset: geom.Vec{30, 0},
+			Rect:   geom.Rect{30, 20},
 		},
 		// 2,0
 		"three": Tile{
-			Offset: geom.Vec{600, 0},
-			Rect:   geom.Rect{300, 200},
+			Offset: geom.Vec{60, 0},
+			Rect:   geom.Rect{30, 20},
 		},
 		// 0,1
 		"four": Tile{
-			Offset: geom.Vec{0, 200},
-			Rect:   geom.Rect{300, 200},
+			Offset: geom.Vec{0, 20},
+			Rect:   geom.Rect{30, 20},
 		},
 		// 1,1
 		"five": Tile{
-			Offset: geom.Vec{300, 200},
-			Rect:   geom.Rect{300, 200},
+			Offset: geom.Vec{30, 20},
+			Rect:   geom.Rect{30, 20},
 		},
 		// 2,1
 		"six": Tile{
-			Offset: geom.Vec{600, 200},
-			Rect:   geom.Rect{300, 200},
+			Offset: geom.Vec{60, 20},
+			Rect:   geom.Rect{30, 20},
 		},
 		// 0,2
 		"seven": Tile{
-			Offset: geom.Vec{0, 400},
-			Rect:   geom.Rect{300, 200},
+			Offset: geom.Vec{0, 40},
+			Rect:   geom.Rect{30, 20},
 		},
 		// 1,2
 		"eight": Tile{
-			Offset: geom.Vec{300, 400},
-			Rect:   geom.Rect{300, 200},
+			Offset: geom.Vec{30, 40},
+			Rect:   geom.Rect{30, 20},
 		},
 		// 2,2
 		"nine": Tile{
-			Offset: geom.Vec{600, 400},
-			Rect:   geom.Rect{300, 200},
+			Offset: geom.Vec{60, 40},
+			Rect:   geom.Rect{30, 20},
 		},
 	}
 	srcVideo := geom.Rect{900, 600}
