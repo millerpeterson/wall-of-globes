@@ -2,6 +2,7 @@ version: '3'
 
 vars:
   MULTICAST_ADDR: 225.0.0.1
+  VLC_CMD: VLC
 
 tasks:
   build-globe:
@@ -32,9 +33,17 @@ tasks:
   multicast-stream:
     desc: Start streaming a file to a multi-cast address (default 225.0.0.1). Pass the file path as arg.
     cmds:
-      - echo "vlc -vvv {{.CLI_ARGS}} --sout udp:{{.MULTICAST_ADDR}}"
+      - echo "{{.VLC_CMD}} -vvv {{.CLI_ARGS}} --sout udp:{{.MULTICAST_ADDR}}"
 
   play-stream:
     desc: Play a stream from a multi-cast address with a crop (with pi video args).
     cmds:
-      - echo "vlc -vvv udp://@{{.MULTICAST_ADDR}} --video-filter=croppadd{croptop=100} --codec avcodec,none"
+      - echo "{{.VLC_CMD}} -vvv udp://@{{.MULTICAST_ADDR}} --video-filter=croppadd{croptop=100} --codec avcodec,none"
+
+  run-company:
+    desc: Call out to globes to run as configured by test_wall.json.
+    cmds:
+      - go run cmd/company/company.go test_wall.json udp://{{.MULTICAST_ADDR}} {{.SRC_WIDTH}} {{.SRC_HEIGHT}}
+    vars:
+      SRC_WIDTH: 1280
+      SRC_HEIGHT: 550

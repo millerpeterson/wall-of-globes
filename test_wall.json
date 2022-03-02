@@ -1,0 +1,28 @@
+{
+  "server_map": {
+    "left": "192.168.0.137:8081",
+    "right": "127.0.0.1:8081"
+  },
+  "tiles": {
+    "left": {
+      "offset": {
+        "x": 0,
+        "y": 0
+      },
+      "rect": {
+        "width": 640,
+        "height": 550
+      }
+    },
+    "right": {
+      "offset": {
+        "x": 640,
+        "y": 0
+      },
+      "rect": {
+        "width": 640,
+        "height": 550
+      }
+    }
+  }
+}
