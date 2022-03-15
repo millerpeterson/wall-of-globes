@@ -25,7 +25,7 @@ func OsVlcPath() string {
 func OSVlcArgs() []string {
 	if runtime.GOOS == "linux" {
 		// The crop filter seems not to work on the Pi with hardware decoding.
-		return []string{"--codec avcodec,none"}
+		return []string{"--codec", "avcodec,none"}
 	} else {
 		return []string{}
 	}
