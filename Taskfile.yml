@@ -33,7 +33,7 @@ tasks:
   multicast-stream:
     desc: Start streaming a file to a multi-cast address (default 225.0.0.1). Pass the file path as arg.
     cmds:
-      - echo "{{.VLC_CMD}} -vvv {{.CLI_ARGS}} --sout udp:{{.MULTICAST_ADDR}}"
+      - echo "{{.VLC_CMD}} -vvv {{.CLI_ARGS}} --sout udp:{{.MULTICAST_ADDR}}" --loop
 
   play-stream:
     desc: Play a stream from a multi-cast address with a crop (with pi video args).
