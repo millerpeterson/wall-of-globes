@@ -8,7 +8,20 @@ tasks:
   build-globe:
     desc: Build the display server.
     cmds:
-      - go build -o bin/tile main.go
+      - go build -o {{.OUTPUT_FILE}} cmd/globe/globe.go
+    vars:
+      OUTPUT_FILE: '{{default "bin/globe" .OUTPUT_FILE}}'
+
+  build-globe-pi:
+    desc: Build the display server for a Raspberry Pi.
+    cmds:
+      - task: build-globe
+        vars:
+          OUTPUT_FILE: bin/globe-pi
+    env:
+      GOOS: linux
+      GOARCH: arm
+      GOARM: 5
 
   run-globe:
     desc: Start a display server.
@@ -33,7 +46,7 @@ tasks:
   multicast-stream:
     desc: Start streaming a file to a multi-cast address (default 225.0.0.1). Pass the file path as arg.
     cmds:
-      - echo "{{.VLC_CMD}} -vvv {{.CLI_ARGS}} --sout udp:{{.MULTICAST_ADDR}}" --loop
+      - echo "{{.VLC_CMD}} -vvv {{.CLI_ARGS}} --sout udp:{{.MULTICAST_ADDR}} --loop"
 
   play-stream:
     desc: Play a stream from a multi-cast address with a crop (with pi video args).
@@ -43,7 +56,14 @@ tasks:
   run-company:
     desc: Call out to globes to run as configured by test_wall.json.
     cmds:
-      - go run cmd/company/company.go test_wall.json udp://{{.MULTICAST_ADDR}} {{.SRC_WIDTH}} {{.SRC_HEIGHT}}
-    vars:
-      SRC_WIDTH: 1280
-      SRC_HEIGHT: 550
+      - go run cmd/company/company.go test_wall.json terminator.mp4
+
+  probe-dims:
+    desc: Use ffprobe to determine media dimensions.
+    cmds:
+      - ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 {{.CLI_ARGS}}
+
+  sync-ssh-key:
+    desc: Add an SSH key to a remote machine.
+    cmds:
+      - ssh-copy-id -i ~/.ssh/id_ed25519 pi@{{.CLI_ARGS}}
