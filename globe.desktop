@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=Application
+Name=Globe
+Exec=/home/pi/globe >> /home/pi/globe.log
