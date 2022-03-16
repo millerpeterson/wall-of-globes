@@ -10,19 +10,7 @@ import (
 )
 
 const sshUser string = "pi"
-const binary string = "bin/globe-pi"
-
-func rebootPi(piIp string) *exec.Cmd {
-	sshArgs := []string{
-		fmt.Sprintf("%s@%s", sshUser, piIp),
-		fmt.Sprintf("sudo shutdown -r now"),
-	}
-	cmd := exec.Command("ssh", sshArgs...)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	cmd.Start()
-	return cmd
-}
+const binary string = "bin/globe"
 
 func wallIps(wl wall.Wall) []string {
 	ips := []string{}
@@ -35,6 +23,18 @@ func wallIps(wl wall.Wall) []string {
 		}
 	}
 	return ips
+}
+
+func rebootPi(piIp string) *exec.Cmd {
+	sshArgs := []string{
+		fmt.Sprintf("%s@%s", sshUser, piIp),
+		fmt.Sprintf("sudo shutdown -r now"),
+	}
+	cmd := exec.Command("ssh", sshArgs...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Start()
+	return cmd
 }
 
 func rebootWall(wl wall.Wall) {
@@ -63,6 +63,37 @@ func syncWallGlobes(wl wall.Wall) {
 	}
 }
 
+func setupPi(piAddr string) {
+	piHost := fmt.Sprintf("%s@%s", sshUser, piAddr)
+
+	mkdirCmd := exec.Command(
+		"ssh",
+		piHost,
+		"mkdir -p /home/pi/.config/autostart",
+	)
+	mkdirCmd.Stdout = os.Stdout
+	mkdirCmd.Stderr = os.Stderr
+	mkdirCmd.Start()
+	mkdirCmd.Wait()
+
+	scpCmd := exec.Command(
+		"scp",
+		"globe.desktop",
+		fmt.Sprintf("%s:/home/pi/.config/autostart/globe.desktop", piHost),
+	)
+	scpCmd.Start()
+	scpCmd.Stdout = os.Stdout
+	scpCmd.Stderr = os.Stderr
+	scpCmd.Wait()
+}
+
+func setupWall(wl wall.Wall) {
+	for _, ip := range wallIps(wl) {
+		log.Printf("Setting up %s", ip)
+		setupPi(ip)
+	}
+}
+
 func main() {
 	action := os.Args[1]
 
@@ -77,5 +108,7 @@ func main() {
 		rebootWall(wl)
 	case "sync":
 		syncWallGlobes(wl)
+	case "setup":
+		setupWall(wl)
 	}
 }
