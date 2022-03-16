@@ -5,13 +5,16 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/millerpeterson/wall-of-globes/internal/geom"
+	"github.com/millerpeterson/wall-of-globes/internal/media"
 	"github.com/millerpeterson/wall-of-globes/internal/player"
 	"github.com/millerpeterson/wall-of-globes/internal/tiling"
+	"github.com/millerpeterson/wall-of-globes/internal/vlc"
 	"github.com/millerpeterson/wall-of-globes/internal/wall"
 	"log"
 	"net/http"
 	"net/url"
 	"os"
+	"os/exec"
 	"strconv"
 	"time"
 )
@@ -64,25 +67,56 @@ func doReq(req GlobePlayRequest, ch chan<- string) {
 	ch <- fmt.Sprintf("%v -> %v", req.Address, resp.StatusCode)
 }
 
+func multicastStream(filePath string, multicastAddr string) *exec.Cmd {
+	vlcArgs := []string{
+		// "-vvv",
+		"--sout",
+		fmt.Sprintf("udp:%s", multicastAddr),
+		"--loop",
+	}
+	return vlc.Play(filePath, vlcArgs)
+}
+
+func mediaDims(filePath string) (geom.Rect, error) {
+	dims, err := media.MediaDims(filePath)
+	if err != nil {
+		log.Println("Failed to extract media dimensions; looking for STREAM_WIDTH / STREAM HEIGHT env vars.")
+		dims.Width, err = strconv.Atoi(os.Getenv("STREAM_WIDTH"))
+		if err != nil {
+			return dims, err
+		}
+		dims.Height, err = strconv.Atoi(os.Getenv("STREAM_HEIGHT"))
+		if err != nil {
+			return dims, err
+		}
+	}
+	return dims, nil
+}
+
 func main() {
 	wallConfig := os.Args[1]
 	stream := os.Args[2]
-	streamWidth, err := strconv.Atoi(os.Args[3])
+	streamDims, err := mediaDims(stream)
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalf("Failed to determine input file dims: %v\n", err)
 	}
-	streamHeight, err := strconv.Atoi(os.Args[4])
-	if err != nil {
-		log.Fatalln(err)
-	}
-	streamDims := geom.Rect{streamWidth, streamHeight}
 
-	reqs := playReqs(wallConfig, stream, streamDims)
+	multicastAddr := "225.0.0.1"
+	log.Printf("Starting multicast stream of %s to udp:%s\n", stream, multicastAddr)
+	vlcMulticast := multicastStream(stream, multicastAddr)
+
+	multicastStreamUrl := fmt.Sprintf("udp://@%s", multicastAddr)
+	reqs := playReqs(wallConfig, multicastStreamUrl, streamDims)
 	ch := make(chan string)
 	for _, req := range reqs {
 		go doReq(req, ch)
 	}
 	for range reqs {
 		log.Println(<-ch)
+	}
+
+	err = vlcMulticast.Wait()
+	if err != nil {
+		panic(err)
 	}
 }
