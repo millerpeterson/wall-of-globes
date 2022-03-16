@@ -10,21 +10,13 @@ tasks:
     cmds:
       - go build -o {{.OUTPUT_FILE}} cmd/globe/globe.go
     vars:
-      OUTPUT_FILE: '{{default "bin/globe" .OUTPUT_FILE}}'
-
-  build-globe-pi:
-    desc: Build the display server for a Raspberry Pi.
-    cmds:
-      - task: build-globe
-        vars:
-          OUTPUT_FILE: bin/globe-pi
+      OUTPUT_FILE: bin/globe
     env:
       GOOS: linux
       GOARCH: arm
-      GOARM: 5
 
-  run-globe:
-    desc: Start a display server.
+  globe:
+    desc: Start a local display server.
     cmds:
       - go run cmd/globe/globe.go
 
@@ -38,32 +30,55 @@ tasks:
     cmds:
       - curl -X POST http://localhost:8081/stop
 
-  sync-to-pi:
-    desc: Sync source code (not binaries) to pi. Pass pi IP as arg.
+  sync-src:
+    desc: Sync source code (not binaries) to remote machine. <<host>>
     cmds:
-      - rsync -avz --exclude bin . pi@{{.CLI_ARGS}}:~/wall-of-globes
+      - rsync -avz --exclude bin . {{.CLI_ARGS}}:~/wall-of-globes
 
   multicast-stream:
-    desc: Start streaming a file to a multi-cast address (default 225.0.0.1). Pass the file path as arg.
+    desc: Start multicast streaming. <<file>>
     cmds:
       - echo "{{.VLC_CMD}} -vvv {{.CLI_ARGS}} --sout udp:{{.MULTICAST_ADDR}} --loop"
 
-  play-stream:
-    desc: Play a stream from a multi-cast address with a crop (with pi video args).
+  pi-play-stream:
+    desc: Get the command to play a multicast stream from a Pi.
     cmds:
       - echo "{{.VLC_CMD}} -vvv udp://@{{.MULTICAST_ADDR}} --video-filter=croppadd{croptop=100} --codec avcodec,none"
 
-  run-company:
-    desc: Call out to globes to run as configured by test_wall.json.
+  company:
+    desc: Play a video file on a wall. <<wall-config>> <<file>>
     cmds:
       - go run cmd/company/company.go test_wall.json terminator.mp4
 
   probe-dims:
-    desc: Use ffprobe to determine media dimensions.
+    desc: Use ffprobe to determine media dimensions. <<file>>
     cmds:
       - ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 {{.CLI_ARGS}}
 
   sync-ssh-key:
-    desc: Add an SSH key to a remote machine.
+    desc: Add an SSH key to a remote machine. <<host>>
     cmds:
-      - ssh-copy-id -i ~/.ssh/id_ed25519 pi@{{.CLI_ARGS}}
+      - ssh-copy-id -i ~/.ssh/id_ed25519 {{.CLI_ARGS}}
+
+  pi-autostart-globe:
+    desc: Make a Pi run the display server at startup. <<host>>
+    cmds:
+      - ssh {{.CLI_ARGS}} 'mkdir -p /home/pi/.config/autostart'
+      - scp globe.desktop {{.CLI_ARGS}}:/home/pi/.config/autostart/globe.desktop
+
+  multiply-sync:
+    desc: Sync globe binaries over SSH. <<wall-config>>
+    deps:
+      - build-globe
+    cmds:
+      - go run cmd/multiply/multiply.go sync {{.CLI_ARGS}}
+
+  multiply-reboot:
+    desc: Tell globe machines to reboot. <<wall-config>>
+    cmds:
+      - go run cmd/multiply/multiply.go reboot {{.CLI_ARGS}}
+
+  multiply-setup:
+    desc: Configure machines in a wall to run globe at startup. <<wall-config>>
+    cmds:
+      - go run cmd/multiply/multiply.go setup {{.CLI_ARGS}}
