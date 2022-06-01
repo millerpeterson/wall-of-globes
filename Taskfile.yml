@@ -48,7 +48,7 @@ tasks:
   company:
     desc: Play a video file on a wall. <<wall-config>> <<file>>
     cmds:
-      - go run cmd/company/company.go test_wall.json terminator.mp4
+      - go run cmd/company/company.go {{.CLI_ARGS}}
 
   probe-dims:
     desc: Use ffprobe to determine media dimensions. <<file>>
