@@ -1,0 +1,50 @@
+{
+  "server_map": {
+    "upper-left": "169.254.78.49:8081",
+    "upper-right": "169.254.158.83:8081",
+    "bottom-right": "169.254.120.247:8081",
+    "bottom-left": "169.254.189.68:8081"
+  },
+  "tiles": {
+    "upper-left": {
+      "offset": {
+        "x": 0,
+        "y": 0
+      },
+      "rect": {
+        "width": 28,
+        "height": 21
+      }
+    },
+    "upper-right": {
+      "offset": {
+        "x": 37,
+        "y": 0
+      },
+      "rect": {
+        "width": 28,
+        "height": 21
+      }
+    },
+    "bottom-right": {
+      "offset": {
+        "x": 37,
+        "y": 35
+      },
+      "rect": {
+        "width": 28,
+        "height": 21
+      }
+    },
+    "bottom-left": {
+      "offset": {
+        "x": 0,
+        "y": 35
+      },
+      "rect": {
+        "width": 28,
+        "height": 21
+      }
+    }
+  }
+}
