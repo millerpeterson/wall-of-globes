@@ -7,8 +7,8 @@ import (
 )
 
 func TestMediaDims(t *testing.T) {
-	expectedDims := geom.Rect{1280, 550}
-	probedDims, err := MediaDims("terminator.mp4")
+	expectedDims := geom.Rect{1280, 720}
+	probedDims, err := MediaDims("Beam Sequence 900, Quantized Space.mp4")
 	if err != nil {
 		t.Fatalf("Failed to get media dims: %v", err)
 	}
