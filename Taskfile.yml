@@ -5,7 +5,7 @@ vars:
   VLC_CMD: VLC
 
 tasks:
-  build-globe:
+  build-globe-pi:
     desc: Build the display server.
     cmds:
       - go build -o {{.OUTPUT_FILE}} cmd/globe/globe.go
@@ -21,7 +21,7 @@ tasks:
       - go run cmd/globe/globe.go
 
   globe-dev-play:
-    desc: Request a local globe to play a file with a crop.
+    desc: Request a local globe to play a file (from its local filesystem) with a crop.
     cmds:
       - curl -d "file=terminator.mp4&top=400" -X POST http://localhost:8081/play
 
@@ -82,3 +82,8 @@ tasks:
     desc: Configure machines in a wall to run globe at startup. <<wall-config>>
     cmds:
       - go run cmd/multiply/multiply.go setup {{.CLI_ARGS}}
+
+  test:
+    desc: Run tests
+    cmds:
+      - go test -v ./...
