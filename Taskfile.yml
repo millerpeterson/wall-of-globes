@@ -5,12 +5,12 @@ vars:
   VLC_CMD: VLC
 
 tasks:
-  build-globe-pi:
+  build-globe:
     desc: Build the display server.
     cmds:
-      - go build -o {{.OUTPUT_FILE}} cmd/globe/globe.go
+      - go build -o "bin/$GOOS/$GOARCH/globe" cmd/globe/globe.go
     vars:
-      OUTPUT_FILE: bin/globe
+      OUTPUT_FILE:
     env:
       GOOS: linux
       GOARCH: arm

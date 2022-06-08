@@ -26,4 +26,13 @@ jobs:
 
     - name: Build Pi
       run: task build
+      env:
+        GOOS: linux
+        GOARCH: arm
+
+    - name: Build OSX
+      run: task build
+      env:
+        GOOS: darwin
+        GOARCH: arm64
 
