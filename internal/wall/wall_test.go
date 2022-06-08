@@ -1,6 +1,7 @@
 package wall
 
 import (
+	"fmt"
 	"github.com/millerpeterson/wall-of-globes/internal/geom"
 	"github.com/millerpeterson/wall-of-globes/internal/tiling"
 	"reflect"
@@ -31,11 +32,15 @@ func TestLoad(t *testing.T) {
 	}
 	loaded, err := Load("test_wall.json")
 
+	fmt.Println("10")
 	if err != nil {
 		t.Errorf("Failed to load wall data: %v", err)
 	}
 
+	fmt.Println("11")
 	if !reflect.DeepEqual(expected, loaded) {
 		t.Errorf("Expected %v, got %v", expected, loaded)
 	}
+
+	fmt.Println("12")
 }
