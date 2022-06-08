@@ -24,14 +24,14 @@ jobs:
     - name: Test
       run: task test
 
-    - name: Build Pi
-      run: task build
+    - name: Build globe for Pi
+      run: task build-globe
       env:
         GOOS: linux
         GOARCH: arm
 
-    - name: Build OSX
-      run: task build
+    - name: Build globe for OSX
+      run: task build-globe
       env:
         GOOS: darwin
         GOARCH: arm64
