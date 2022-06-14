@@ -8,6 +8,40 @@ on:
 
 jobs:
 
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Create tag
+        id: create_tag
+        run: |
+          tag=$(basename "${{ github.ref }}")
+          echo "::set-output name=tag::$tag"
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.create_tag.outputs.tag }}
+          release_name: ${{ steps.create_tag.outputs.tag }}
+          draft: true
+          prerelease: false
+
+      - name: Create artifact info files
+        run: |
+          mkdir info
+          echo "${{ steps.create_release.outputs.id }}" > info/release_id
+          echo "${{ steps.create_release.outputs.upload_url }}" > info/upload_url
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: info
+          path: info
+
   build:
     runs-on: ubuntu-latest
     steps:
