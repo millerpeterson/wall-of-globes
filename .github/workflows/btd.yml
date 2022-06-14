@@ -47,8 +47,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        goos: [ linux, darwin ]
-        goarch: [ arm, arm64 ]
+        include:
+          - goos: darwin
+            goarch: arm64
+          - goos: linux
+            goarch: arm
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
