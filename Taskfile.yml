@@ -45,6 +45,16 @@ tasks:
     cmds:
       - echo "{{.VLC_CMD}} -vvv udp://@{{.MULTICAST_ADDR}} --video-filter=croppadd{croptop=100} --codec avcodec,none"
 
+  build-company:
+    desc: Build stream broadcasting / central command application.
+    cmds:
+      - go build -o "bin/$GOOS/$GOARCH/company" cmd/company/company.go
+    vars:
+      OUTPUT_FILE:
+    env:
+      GOOS: darwin
+      GOARCH: arm64
+
   company:
     desc: Play a video file on a wall. <<wall-config>> <<file>>
     cmds:
