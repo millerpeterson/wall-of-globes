@@ -92,6 +92,22 @@ jobs:
         asset_name: globe-${{ matrix.goos }}-${{ matrix.goarch }}
         asset_content_type: application/octet-stream
 
+    - name: Build company
+      run: task build-company
+      env:
+        GOOS: ${{ matrix.goos }}
+        GOARCH: ${{ matrix.goarch }}
+
+    - name: Upload company binary
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.upload_info.outputs.upload_url }}
+        asset_path: bin/${{ matrix.goos }}/${{ matrix.goarch }}/company
+        asset_name: company-${{ matrix.goos }}-${{ matrix.goarch }}
+        asset_content_type: application/octet-stream
+
   publish:
     name: Publish Release
     needs: [build]
