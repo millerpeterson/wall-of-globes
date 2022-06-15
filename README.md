@@ -72,6 +72,25 @@ If you see a 200 OK status, the device is ready to play streams!
 
 ## Running a Stream
 
+Assuming you have your Globe displays servers up and running, you can use Company to 
+broadcast a stream for them to play.
+
+1. Prepare the video file you would like to stream. Some large files might not 
+perform well - try a lower-resolution / bitrate version if you experience choppiness.
+
+2. Prepare the wall configuration file. There is an example of a 4x4 C64 layout here: 
+[wall-layouts/4x4_64s.json](https://github.com/millerpeterson/wall-of-globes/blob/main/wall-layouts/4x4_c64s.json). You will need to assign the 
+IP addresses of the Pi's in the `server_map` section.
+
+3. Download the latest company for your system from the [releases page](https://github.com/millerpeterson/wall-of-globes/releases).
+
+4. Invoke `company`:
+```shell
+company wall_config.json video_file.mp4
+```
+The globe should begin playing the stream. Quit the app (control-c) to stop the stream. The globe servers will remain
+running, so you should be able to just run Company again.
+
 ## HOWTO
 
 ### Routing the Multicast Stream to a Specific Interface
@@ -79,16 +98,50 @@ If you see a 200 OK status, the device is ready to play streams!
 If the video appears choppy, or stutters, it may be that there is insufficient bandwidth on your network. If you are
 trying to stream over wifi, you might consider running over Ethernet instead. 
 
-To route the multicast packets using 225.0.0.1 as the multicast address through a specific network interface:
+To route the multicast packets using 225.0.0.1 (the address used by this application) as the multicast address
+trough a specific network interface:
 
-OSX:
+#### Temporary Routing Change
+
+The effect of the following commands will be lost when the machine reboots:
+
+##### OSX
+
 ```shell
 sudo route add -net 225.0.0.0/8 -interface en6
 ```
 
-Raspbian:
+##### Raspbian
+
 ```shell
 sudo route add -net 225.0.0.0 netmask 255.0.0.0 eth0
 ```
 
 Where `en6` and `eth0` are the Ethernet network interfaces.
+
+#### Persisted Routing Change
+
+The following commands should make changes that persist through reboots:
+
+##### OSX
+
+1. Find the name of your desired device through `networksetup`:
+```shell
+networksetup -listallnetworkservices
+```
+Note the device's router IP.
+
+2. Set the new route:
+```shell
+networksetup -setadditionalroutes 225.0.0.0 255.0.0.0 192.168.0.1
+```
+Assuming 192.168.0.1 is the router IP you noted in 1.
+
+##### Raspbian
+1. Run `ifconfig`, and note your desired network device's router IP.
+
+2. Add or modify `/lib/dhcpcd/dhcpcd-hooks/40-route`, adding the following line:
+```
+ip route add 225.0.0.0/8 via 192.168.0.1
+``` 
+Again assuming that 192.168.0.1 is the router IP you noted in 1.
