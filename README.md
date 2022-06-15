@@ -133,11 +133,12 @@ Note the device's router IP.
 
 2. Set the new route:
 ```shell
-networksetup -setadditionalroutes 225.0.0.0 255.0.0.0 192.168.0.1
+networksetup -setadditionalroutes "USB 10/100/1000 LAN" 225.0.0.0 255.0.0.0 192.168.0.1
 ```
 Assuming 192.168.0.1 is the router IP you noted in 1.
 
 ##### Raspbian
+
 1. Run `ifconfig`, and note your desired network device's router IP.
 
 2. Add or modify `/lib/dhcpcd/dhcpcd-hooks/40-route`, adding the following line:
